@@ -1,0 +1,101 @@
+{
+    "vpc_cidr": "192.168.0.0/16",
+    "vpc_name": "main_vpc",
+    "public_subnet_cidrs": [
+        "192.168.1.0/24",
+        "192.168.2.0/24"
+    ],
+    "private_subnet_cidrs": [
+        "192.168.3.0/24",
+        "192.168.4.0/24"
+    ],
+    "availability_zones": [
+        "us-east-1a",
+        "us-east-1b"
+    ],
+    "security_groups": {
+        "elb_sg": {
+            "name": "elb_sg",
+            "allow_all_internal_traffic": false,
+            "ingress": [
+                {
+                    "from_port": 80,
+                    "to_port": 80,
+                    "protocol": "tcp",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                },
+                {
+                    "from_port": 443,
+                    "to_port": 443,
+                    "protocol": "tcp",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                }
+            ],
+            "egress": [
+                {
+                    "from_port": 0,
+                    "to_port": 0,
+                    "protocol": "-1",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                }
+            ]
+        },
+        "ec2_sg": {
+            "name": "ec2_sg",
+            "allow_all_internal_traffic": true,
+            "ingress": [
+                {
+                    "from_port": 80,
+                    "to_port": 80,
+                    "protocol": "tcp",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": [
+                        "::/0"
+                    ]
+                },
+                {
+                    "from_port": 443,
+                    "to_port": 443,
+                    "protocol": "tcp",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                },
+                {
+                    "from_port": 22,
+                    "to_port": 22,
+                    "protocol": "tcp",
+                    "cidr_blocks": [
+                        "179.26.124.160/32"
+                    ],
+                    "ipv6_cidr_blocks": [
+                        "::/0"
+                    ]
+                }
+            ],
+            "egress": [
+                {
+                    "from_port": 0,
+                    "to_port": 0,
+                    "protocol": "-1",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                }
+            ]
+        }
+    }
+}
