@@ -3,7 +3,7 @@
         {
             "ami_id": "ami-051f8a213df8bc089",
             "instance_type": "t2.micro",
-            "instance_name": "Tienda en linea web app",
+            "instance_name": "online-store-web-app",
             "instance_count": 2,
             "enable_ipv6": true,
             "instance_tags": {}

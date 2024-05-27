@@ -5,4 +5,5 @@ locals {
 
 locals {
   web_app_instance_sg = local.network_config.security_groups["ec2_sg"].name
+  elb_sg              = local.network_config.security_groups["elb_sg"].name
 }
