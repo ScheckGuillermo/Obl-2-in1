@@ -8,7 +8,7 @@ variable "instance_type" {
   type        = string
 }
 
-variable "instance_name" {
+variable "machine_name" {
   description = "Name of the EC2 instance"
   type        = string
 }
@@ -40,7 +40,3 @@ variable "ssh_key_bucket" {
   type        = string
 }
 
-variable "enable_ipv6" {
-  description = "Enable IPv6 for the instance"
-  type        = bool
-}

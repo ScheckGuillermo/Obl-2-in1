@@ -1,12 +1,11 @@
 {
-    "instances": [
-        {
+    "machines": {
+        "online-store-web-app": {
             "ami_id": "ami-051f8a213df8bc089",
             "instance_type": "t2.micro",
-            "instance_name": "online-store-web-app",
+            "name": "online-store-web-app",
             "instance_count": 2,
-            "enable_ipv6": true,
             "instance_tags": {}
         }
-    ]
+    }
 }

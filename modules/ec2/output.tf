@@ -1,4 +1,9 @@
-output "instance_ids" {
+output "machine_ids" {
   description = "IDs of the created EC2 instances"
-  value       = aws_instance.ec2[*].id
+  value = {
+    (var.machine_name) = [
+      for instance in aws_instance.ec2 : instance.id
+    ]
+  }
 }
+

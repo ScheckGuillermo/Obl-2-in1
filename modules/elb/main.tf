@@ -1,4 +1,4 @@
-resource "aws_lb" "app_lb" {
+resource "aws_lb" "this" {
   name               = var.elb_name
   internal           = false
   load_balancer_type = "application"
@@ -12,7 +12,7 @@ resource "aws_lb" "app_lb" {
   }
 }
 
-resource "aws_lb_target_group" "app_lb_tg" {
+resource "aws_lb_target_group" "this" {
   name     = "${var.elb_name}-tg"
   port     = 80
   protocol = "HTTP"
@@ -33,20 +33,22 @@ resource "aws_lb_target_group" "app_lb_tg" {
   }
 }
 
-resource "aws_lb_listener" "app_lb_listener" {
-  load_balancer_arn = aws_lb.app_lb.arn
+resource "aws_lb_listener" "this" {
+  load_balancer_arn = aws_lb.this.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.app_lb_tg.arn
+    target_group_arn = aws_lb_target_group.this.arn
   }
 }
 
-resource "aws_lb_target_group_attachment" "app_lb_tg_attachment" {
-  for_each         = toset(var.instance_ids)
-  target_group_arn = aws_lb_target_group.app_lb_tg.arn
-  target_id        = each.key
+resource "aws_lb_target_group_attachment" "this" {
+  for_each = {
+    for idx, instance in local.flattened_instance_ids : idx => instance
+  }
+  target_group_arn = aws_lb_target_group.this.arn
+  target_id        = each.value.instance_id
   port             = 80
 }

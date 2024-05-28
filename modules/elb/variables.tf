@@ -18,7 +18,7 @@ variable "security_group_id" {
   type        = string
 }
 
-variable "instance_ids" {
-  description = "List of instance IDs to attach to the ELB"
-  type        = list(string)
+variable "machine_ids" {
+  description = "Map of instance IDs to attach to the ELB"
+  type        = map(list(string))
 }
