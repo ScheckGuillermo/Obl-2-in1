@@ -1,6 +1,6 @@
 {
     "machines": {
-        "online-store-web-app": {
+        "online_store_web_app": {
             "ami_id": "ami-051f8a213df8bc089",
             "instance_type": "t2.micro",
             "name": "online-store-web-app",

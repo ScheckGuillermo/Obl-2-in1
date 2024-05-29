@@ -1,0 +1,19 @@
+{
+    "buckets": {
+        "online_store_web_app_ec2": {
+            "name": "online_store_web_app_ec2",
+            "tags": {},
+            "force_destroy": true
+        },
+        "product_metadata_bucket": {
+            "name": "product_metadata",
+            "tags": {},
+            "force_destroy": true
+        },
+        "product_storage_bucket": {
+            "name": "provider_storage",
+            "tags": {},
+            "force_destroy": true
+        }
+    }
+}
