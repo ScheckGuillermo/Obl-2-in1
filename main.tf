@@ -73,3 +73,16 @@ module "product_storage_bucket" {
   force_destroy = local.product_storage_bucket.s3.bucket.force_destroy
   tags          = local.product_storage_bucket.s3.bucket.tags
 }
+
+#--------------------------------------------------------------------
+# Static Website Bucket for the institutional page
+#--------------------------------------------------------------------
+module "institutional_page_website" {
+  source         = "./modules/s3"
+  bucket_name    = local.institutional_page_website.s3.bucket.name
+  force_destroy  = local.institutional_page_website.s3.bucket.force_destroy
+  tags           = local.institutional_page_website.s3.bucket.tags
+  enable_website = true
+  index_document = local.institutional_page_website.s3.bucket.website.index_document
+  error_document = local.institutional_page_website.s3.bucket.website.error_document
+}

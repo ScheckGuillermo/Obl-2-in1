@@ -41,20 +41,11 @@ locals {
     }
   }
 
+  institutional_page_website = {
+    s3 : {
+      bucket : local.s3_config.buckets["static_website_bucket"]
+    }
+  }
+
 }
 
-# # Iam Roles and Policies per service
-# locals {
-#   product_metadata_bucket_roles_and_policies = local.iam_config["product_metadata_bucket"]
-# }
-
-# # Security Groups
-# locals {
-#   online_store_web_app_machine_sg = local.vpc_config.security_groups["ec2_sg"].name
-#   elb_sg                          = local.vpc_config.security_groups["elb_sg"].name
-# }
-
-# # EC2 Instances
-# locals {
-#   online_store_web_app_machine = local.ec2_config.machines["online-store-web-app"]
-# }

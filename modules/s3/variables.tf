@@ -12,3 +12,21 @@ variable "force_destroy" {
   description = "A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error."
   type        = bool
 }
+
+variable "enable_website" {
+  description = "Enable S3 static website hosting"
+  type        = bool
+  default     = false
+}
+
+variable "index_document" {
+  description = "The index document for the website"
+  type        = string
+  default     = ""
+}
+
+variable "error_document" {
+  description = "The error document for the website"
+  type        = string
+  default     = ""
+}

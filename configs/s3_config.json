@@ -1,17 +1,26 @@
 {
     "buckets": {
         "online_store_web_app_ec2": {
-            "name": "online_store_web_app_ec2",
+            "name": "online-store-web-app-ec2",
             "tags": {},
             "force_destroy": true
         },
         "product_metadata_bucket": {
-            "name": "product_metadata",
+            "name": "product-metadata-online-store",
             "tags": {},
             "force_destroy": true
         },
         "product_storage_bucket": {
-            "name": "provider_storage",
+            "name": "provider-storage-online-store",
+            "tags": {},
+            "force_destroy": true
+        },
+        "static_website_bucket": {
+            "name": "institutional-page-online-store",
+            "website": {
+                "index_document": "index.html",
+                "error_document": "error.html"
+            },
             "tags": {},
             "force_destroy": true
         }
