@@ -49,14 +49,14 @@ module "product_metadata_bucket" {
   tags          = local.product_metadata_bucket.s3.bucket.tags
 }
 
-module "product_metadata_bucket_iam" {
+module "product_metadata_bucket_iam_role" {
   source = "./modules/iam"
 
-  role_name          = local.product_metadata_bucket.iam.roles_and_policies.role_name
-  assume_role_policy = jsonencode(local.product_metadata_bucket.iam.roles_and_policies.assume_role_policy)
+  role_name          = local.product_metadata_bucket.iam.roles.editor.role_name
+  assume_role_policy = jsonencode(local.product_metadata_bucket.iam.roles.editor.assume_role_policy)
   arn                = module.product_metadata_bucket.bucket_arn
   policies = [
-    for policy in local.product_metadata_bucket.iam.roles_and_policies.policies : {
+    for policy in local.product_metadata_bucket.iam.roles.editor.policies : {
       policy_name     = policy.policy_name
       policy_template = jsonencode(policy.policy_template)
     }
@@ -65,17 +65,17 @@ module "product_metadata_bucket_iam" {
 }
 
 #--------------------------------------------------------------------
-# Provider's bucket for storing products
+# Order Storage Bucket to be used by Providers to store orders
 #--------------------------------------------------------------------
-module "product_storage_bucket" {
+module "orders_storage_bucket" {
   source        = "./modules/s3"
-  bucket_name   = local.product_storage_bucket.s3.bucket.name
-  force_destroy = local.product_storage_bucket.s3.bucket.force_destroy
-  tags          = local.product_storage_bucket.s3.bucket.tags
+  bucket_name   = local.order_storage_bucket.s3.bucket.name
+  force_destroy = local.order_storage_bucket.s3.bucket.force_destroy
+  tags          = local.order_storage_bucket.s3.bucket.tags
 }
 
 #--------------------------------------------------------------------
-# Static Website Bucket for the institutional page
+# Static Website for the institutional page
 #--------------------------------------------------------------------
 module "institutional_page_website" {
   source         = "./modules/s3"
@@ -88,30 +88,69 @@ module "institutional_page_website" {
 }
 
 #--------------------------------------------------------------------
-# Order Processing and Customer notifications
+# Automatic Order Processing and Customer notifications
 #--------------------------------------------------------------------
-module "order_processing_notification" {
-  source                     = "./modules/sqs_sns"
-  queue_name                 = local.order_processing_notification.sqs.queue.name
-  visibility_timeout_seconds = local.order_processing_notification.sqs.queue.visibility_timeout_seconds
-  message_retention_seconds  = local.order_processing_notification.sqs.queue.message_retention_seconds
-  queue_tags                 = local.order_processing_notification.sqs.queue.tags
+module "order_processing_queue" {
+  source                     = "./modules/sqs"
+  queue_name                 = local.order_processing.sqs.queue.name
+  visibility_timeout_seconds = local.order_processing.sqs.queue.visibility_timeout_seconds
+  message_retention_seconds  = local.order_processing.sqs.queue.message_retention_seconds
+  tags                       = local.order_processing.sqs.queue.tags
 
-  topic_name = local.order_processing_notification.sns.topic.topic_name
-  topic_tags = local.order_processing_notification.sns.topic.tags
 }
 
-module "order_processing_notification_iam" {
+module "order_processing_queue_iam_role" {
   source = "./modules/iam"
 
-  role_name          = local.order_processing_notification.iam.roles_and_policies.role_name
-  assume_role_policy = jsonencode(local.order_processing_notification.iam.roles_and_policies.assume_role_policy)
-  arn                = module.order_processing_notification.queue_arn
+  role_name          = local.order_processing.iam.roles.enqueue.role_name
+  assume_role_policy = jsonencode(local.order_processing.iam.roles.enqueue.assume_role_policy)
+  arn                = module.order_processing_queue.queue_arn
   policies = [
-    for policy in local.order_processing_notification.iam.roles_and_policies.policies : {
+    for policy in local.order_processing.iam.roles.enqueue.policies : {
       policy_name     = policy.policy_name
       policy_template = jsonencode(policy.policy_template)
     }
   ]
 
+}
+
+module "order_processing_topic" {
+  source = "./modules/sns"
+
+  topic_name = local.order_processing.sns.topic.topic_name
+  tags       = local.order_processing.sns.topic.tags
+}
+
+module "order_processing_notifications" {
+  source    = "./modules/sns_to_sqs"
+  topic_arn = module.order_processing_topic.topic_arn
+  protocol  = local.order_processing.sns_to_sqs.protocol
+  endpoint  = module.order_processing_queue.queue_arn
+}
+
+module "order_processing_lambda_iam_role" {
+  source = "./modules/iam"
+
+  role_name          = local.order_processing.iam.roles.execute_lambda.role_name
+  assume_role_policy = jsonencode(local.order_processing.iam.roles.execute_lambda.assume_role_policy)
+  arn                = module.order_processing_queue.queue_arn
+  policies = [
+    for policy in local.order_processing.iam.roles.execute_lambda.policies : {
+      policy_name     = policy.policy_name
+      policy_template = jsonencode(policy.policy_template)
+    }
+  ]
+
+}
+
+module "order_processing_lambda" {
+  source        = "./modules/lambda"
+  function_name = local.order_processing.lambda.function.function_name
+  handler       = local.order_processing.lambda.function.handler
+  runtime       = local.order_processing.lambda.function.runtime
+  filename      = local.order_processing.lambda.function.filename 
+  queue_url     = module.order_processing_queue.queue_url
+  bucket        = module.orders_storage_bucket.bucket_id
+  bucket_arn    = module.orders_storage_bucket.bucket_arn
+  role_arn      = module.order_processing_lambda_iam_role.role_arn
 }

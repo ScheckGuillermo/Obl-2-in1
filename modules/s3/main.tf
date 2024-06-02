@@ -33,6 +33,8 @@ resource "aws_s3_bucket_policy" "this" {
   ]
 }
 POLICY
+
+  depends_on = [aws_s3_bucket_public_access_block.this]
 }
 
 resource "aws_s3_bucket_website_configuration" "this" {

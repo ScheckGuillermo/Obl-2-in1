@@ -3,12 +3,6 @@ variable "queue_name" {
   type        = string
 }
 
-variable "queue_tags" {
-  description = "A map of tags to assign to the queue"
-  type        = map(string)
-
-}
-
 variable "visibility_timeout_seconds" {
   description = "The visibility timeout for the queue"
   type        = number
@@ -21,13 +15,8 @@ variable "message_retention_seconds" {
   default     = 345600
 }
 
-variable "topic_name" {
-  description = "The name of the SNS topic"
-  type        = string
-}
-
-variable "topic_tags" {
-  description = "A map of tags to assign to the resources"
+variable "tags" {
+  description = "A map of tags to assign to the queue"
   type        = map(string)
   default     = {}
 }

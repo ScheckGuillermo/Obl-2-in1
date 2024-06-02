@@ -10,8 +10,8 @@
             "tags": {},
             "force_destroy": true
         },
-        "product_storage_bucket": {
-            "name": "provider-storage-online-store",
+        "orders_storage_bucket": {
+            "name": "order-storage-providers",
             "tags": {},
             "force_destroy": true
         },

@@ -44,7 +44,7 @@
             }
         ]
     },
-    "product_storage_bucket": {
+    "orders_storage_bucket": {
         "role_name": "provider_role",
         "assume_role_policy": {
             "Version": "2012-10-17",
@@ -89,8 +89,8 @@
             }
         ]
     },
-    "order_processing_notifications": {
-        "role_name": "order_processing_role",
+    "order_processing_queue": {
+        "role_name": "order_processing_queue_role",
         "assume_role_policy": {
             "Version": "2012-10-17",
             "Statement": [
@@ -105,7 +105,7 @@
         },
         "policies": [
             {
-                "policy_name": "order_processing_policy",
+                "policy_name": "order_processing_enqueue_olicy",
                 "policy_template": {
                     "Version": "2012-10-17",
                     "Statement": [
@@ -113,6 +113,70 @@
                             "Effect": "Allow",
                             "Action": "sqs:SendMessage",
                             "Resource": "_arn_"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "order_processing_lambda": {
+        "role_name": "order_processing_lambda_exec_role",
+        "assume_role_policy": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "lambda.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "policies": [
+            {
+                "policy_name": "lambda_basic_execution",
+                "policy_template": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                }
+            },
+            {
+                "policy_name": "lambda_sqs_policy",
+                "policy_template": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": "sqs:SendMessage",
+                            "Resource": "_arn_"
+                        }
+                    ]
+                }
+            },
+            {
+                "policy_name": "lambda_s3_policy",
+                "policy_template": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3:::order-storage-providers/*"
+                            ]
                         }
                     ]
                 }

@@ -1,0 +1,8 @@
+{
+    "order_processing": {
+        "function_name": "order_processing_lambda",
+        "handler": "index.handler",
+        "runtime": "nodejs16.x",
+        "filename": "./files/lambda/order_processing_lambda.zip"
+    }
+}
