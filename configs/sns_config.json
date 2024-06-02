@@ -1,0 +1,8 @@
+{
+    "customer_notifications": {
+        "topic_name": "customer-notifications-topic",
+        "tags": {
+            "Service": "customer-notifications"
+        }
+    }
+}

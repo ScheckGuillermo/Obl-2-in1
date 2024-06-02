@@ -1,0 +1,10 @@
+{
+    "order_processing_queue": {
+        "name": "order-processing-queue",
+        "visibility_timeout_seconds": 60,
+        "message_retention_seconds": 1209600,
+        "tags": {
+            "Service": "order-processing"
+        }
+    }
+}

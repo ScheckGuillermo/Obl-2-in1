@@ -4,6 +4,8 @@ locals {
   ec2_config = jsondecode(file("${path.module}/configs/ec2_config.json"))
   iam_config = jsondecode(file("${path.module}/configs/iam_config.json"))
   s3_config  = jsondecode(file("${path.module}/configs/s3_config.json"))
+  sqs_config = jsondecode(file("${path.module}/configs/sqs_config.json"))
+  sns_config = jsondecode(file("${path.module}/configs/sns_config.json"))
 }
 
 locals {
@@ -47,5 +49,16 @@ locals {
     }
   }
 
+  order_processing_notification = {
+    iam : {
+      roles_and_policies : local.iam_config["order_processing_notifications"]
+    }
+    sqs : {
+      queue : local.sqs_config["order_processing_queue"]
+    }
+    sns : {
+      topic : local.sns_config["customer_notifications"]
+    }
+  }
 }
 

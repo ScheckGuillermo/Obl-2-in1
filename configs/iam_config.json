@@ -88,5 +88,35 @@
                 }
             }
         ]
+    },
+    "order_processing_notifications": {
+        "role_name": "order_processing_role",
+        "assume_role_policy": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "sqs.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "policies": [
+            {
+                "policy_name": "order_processing_policy",
+                "policy_template": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": "sqs:SendMessage",
+                            "Resource": "_arn_"
+                        }
+                    ]
+                }
+            }
+        ]
     }
 }
