@@ -1,12 +1,13 @@
 # Global configurations for each AWS service
 locals {
-  vpc_config    = jsondecode(file("${path.module}/configs/vpc_config.json"))
-  ec2_config    = jsondecode(file("${path.module}/configs/ec2_config.json"))
-  iam_config    = jsondecode(file("${path.module}/configs/iam_config.json"))
-  s3_config     = jsondecode(file("${path.module}/configs/s3_config.json"))
-  sqs_config    = jsondecode(file("${path.module}/configs/sqs_config.json"))
-  sns_config    = jsondecode(file("${path.module}/configs/sns_config.json"))
-  lambda_config = jsondecode(file("${path.module}/configs/lambda_config.json"))
+  vpc_config        = jsondecode(file("${path.module}/configs/vpc_config.json"))
+  ec2_config        = jsondecode(file("${path.module}/configs/ec2_config.json"))
+  iam_config        = jsondecode(file("${path.module}/configs/iam_config.json"))
+  s3_config         = jsondecode(file("${path.module}/configs/s3_config.json"))
+  sqs_config        = jsondecode(file("${path.module}/configs/sqs_config.json"))
+  sns_config        = jsondecode(file("${path.module}/configs/sns_config.json"))
+  lambda_config     = jsondecode(file("${path.module}/configs/lambda_config.json"))
+  cloudwatch_config = jsondecode(file("${path.module}/configs/cloudwatch_config.json"))
 }
 
 locals {
@@ -74,5 +75,10 @@ locals {
       function : local.lambda_config["order_processing"]
     }
   }
-}
 
+  logs = {
+    cloudwatch : {
+      central_log_group : local.cloudwatch_config["log_groups"].central_log_group
+    }
+  }
+}

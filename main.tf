@@ -12,6 +12,18 @@ module "vpc" {
   security_groups      = local.vpc_config.security_groups
 }
 
+
+#--------------------------------------------------------------------
+# Centralized logs for main resources
+#--------------------------------------------------------------------
+module "centralized_logs" {
+  source = "./modules/cloudwatch"
+
+  log_group_name    = local.logs.cloudwatch.central_log_group.group_name
+  retention_in_days = local.logs.cloudwatch.central_log_group.retention_in_days
+  tags              = local.logs.cloudwatch.central_log_group.tags
+}
+
 #--------------------------------------------------------------------
 # Online Store Web App
 #--------------------------------------------------------------------
@@ -122,7 +134,8 @@ module "order_processing_topic" {
 }
 
 module "order_processing_notifications" {
-  source    = "./modules/sns_to_sqs"
+  source = "./modules/sns_to_sqs"
+
   topic_arn = module.order_processing_topic.topic_arn
   protocol  = local.order_processing.sns_to_sqs.protocol
   endpoint  = module.order_processing_queue.queue_arn
@@ -144,13 +157,15 @@ module "order_processing_lambda_iam_role" {
 }
 
 module "order_processing_lambda" {
-  source        = "./modules/lambda"
-  function_name = local.order_processing.lambda.function.function_name
-  handler       = local.order_processing.lambda.function.handler
-  runtime       = local.order_processing.lambda.function.runtime
-  filename      = local.order_processing.lambda.function.filename 
-  queue_url     = module.order_processing_queue.queue_url
-  bucket        = module.orders_storage_bucket.bucket_id
-  bucket_arn    = module.orders_storage_bucket.bucket_arn
-  role_arn      = module.order_processing_lambda_iam_role.role_arn
+  source = "./modules/lambda"
+
+  function_name  = local.order_processing.lambda.function.function_name
+  handler        = local.order_processing.lambda.function.handler
+  runtime        = local.order_processing.lambda.function.runtime
+  filename       = local.order_processing.lambda.function.filename
+  queue_url      = module.order_processing_queue.queue_url
+  bucket         = module.orders_storage_bucket.bucket_id
+  bucket_arn     = module.orders_storage_bucket.bucket_arn
+  role_arn       = module.order_processing_lambda_iam_role.role_arn
+  log_group_name = module.centralized_logs.log_group_name
 }

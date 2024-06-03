@@ -11,6 +11,11 @@ resource "aws_lambda_function" "this" {
       QUEUE_URL = var.queue_url
     }
   }
+
+  logging_config {
+    log_format = "JSON"
+    log_group  = var.log_group_name
+  }
 }
 
 resource "aws_lambda_permission" "allow_s3_to_invoke" {

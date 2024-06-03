@@ -1,0 +1,11 @@
+{
+    "log_groups": {
+        "central_log_group": {
+            "group_name": "central_log_group",
+            "retention_in_days": 7,
+            "tags": {
+                "Name": "central_log_group"
+            }
+        }
+    }
+}
