@@ -1,4 +1,41 @@
 {
+    "central_log_group": {
+        "role_name": "centralized_log_group",
+        "assume_role_policy": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "policies": [
+            {
+                "policy_name": "centralized_log_group_policy",
+                "policy_template": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents",
+                                "logs:DescribeLogStreams"
+                            ],
+                            "Resource": [
+                                "_arn_"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    },
     "product_metadata_bucket": {
         "role_name": "product_editor_role",
         "assume_role_policy": {

@@ -21,9 +21,6 @@ locals {
     elb : {
       elb_name : "online-store-web-app-elb"
       security_group : local.vpc_config.security_groups["elb_sg"].name
-    },
-    s3 : {
-      bucket : local.s3_config.buckets["online_store_web_app_ec2"]
     }
   }
 
@@ -77,6 +74,11 @@ locals {
   }
 
   logs = {
+    iam : {
+      roles : {
+        ec2_receive_logs : local.iam_config["central_log_group"]
+      }
+    }
     cloudwatch : {
       central_log_group : local.cloudwatch_config["log_groups"].central_log_group
     }

@@ -24,6 +24,21 @@ module "centralized_logs" {
   tags              = local.logs.cloudwatch.central_log_group.tags
 }
 
+module "ec2_instances_logs_role" {
+  source = "./modules/iam"
+
+  role_name          = local.logs.iam.roles.ec2_receive_logs.role_name
+  assume_role_policy = jsonencode(local.logs.iam.roles.ec2_receive_logs.assume_role_policy)
+  arn                = module.centralized_logs.log_group_arn
+  policies = [
+    for policy in local.logs.iam.roles.ec2_receive_logs.policies : {
+      policy_name     = policy.policy_name
+      policy_template = jsonencode(policy.policy_template)
+    }
+  ]
+
+}
+
 #--------------------------------------------------------------------
 # Online Store Web App
 #--------------------------------------------------------------------
@@ -38,7 +53,11 @@ module "online_store_ec2_instances" {
   subnet_id         = module.vpc.private_subnet_ids[0]
   security_group_id = module.vpc.security_group_ids[local.online_store_web_app.vpc.security_group]
   ssh_key_bucket    = module.product_metadata_bucket.bucket_id
+  log_group_name    = module.centralized_logs.log_group_name
+  user_data_path    = local.online_store_web_app.ec2.instance.user_data_path
 }
+
+
 
 module "online_store_elb" {
   source = "./modules/elb"
@@ -169,3 +188,4 @@ module "order_processing_lambda" {
   role_arn       = module.order_processing_lambda_iam_role.role_arn
   log_group_name = module.centralized_logs.log_group_name
 }
+

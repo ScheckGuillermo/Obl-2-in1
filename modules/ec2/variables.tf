@@ -40,3 +40,12 @@ variable "ssh_key_bucket" {
   type        = string
 }
 
+variable "log_group_name" {
+  type        = string
+  description = "Name of the CloudWatch Log Group"
+}
+
+variable "user_data_path" {
+  type        = string
+  description = "Path to the user data script"
+}
