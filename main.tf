@@ -116,6 +116,9 @@ module "institutional_page_website" {
   enable_website = true
   index_document = local.institutional_page_website.s3.bucket.website.index_document
   error_document = local.institutional_page_website.s3.bucket.website.error_document
+  index_html     = local.institutional_page_website.s3.bucket.website.index_html
+  error_html     = local.institutional_page_website.s3.bucket.website.error_html
+  styles_css     = local.institutional_page_website.s3.bucket.website.styles_css
 }
 
 #--------------------------------------------------------------------

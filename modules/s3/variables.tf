@@ -30,3 +30,21 @@ variable "error_document" {
   type        = string
   default     = ""
 }
+
+variable "index_html" {
+  description = "The path to the index.html file"
+  type        = string
+  default     = ""
+}
+
+variable "error_html" {
+  description = "The path to the error.html file"
+  type        = string
+  default     = ""
+}
+
+variable "styles_css" {
+  description = "The path to the styles.css file"
+  type        = string
+  default     = ""
+}

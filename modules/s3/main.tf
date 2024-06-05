@@ -49,3 +49,33 @@ resource "aws_s3_bucket_website_configuration" "this" {
     key = var.error_document
   }
 }
+
+resource "aws_s3_object" "index_html" {
+  count  = var.enable_website ? 1 : 0
+  bucket = aws_s3_bucket.this.bucket
+  key    = var.index_document
+  source = var.index_html
+  content_type = "text/html"
+
+  depends_on = [aws_s3_bucket_policy.this, aws_s3_bucket_public_access_block.this]
+}
+
+resource "aws_s3_object" "styles_css" {
+  count  = var.enable_website ? 1 : 0
+  bucket = aws_s3_bucket.this.bucket
+  key    = "styles.css"
+  source = var.styles_css
+  content_type = "text/css"
+
+  depends_on = [aws_s3_bucket_policy.this, aws_s3_bucket_public_access_block.this]
+}
+
+resource "aws_s3_object" "error_html" {
+  count        = var.enable_website ? 1 : 0
+  bucket       = aws_s3_bucket.this.bucket
+  key          = var.error_document
+  source       = var.error_html
+  content_type = "text/html"
+
+  depends_on = [aws_s3_bucket_policy.this, aws_s3_bucket_public_access_block.this]
+}

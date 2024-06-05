@@ -19,7 +19,10 @@
             "name": "institutional-page-online-store",
             "website": {
                 "index_document": "index.html",
-                "error_document": "error.html"
+                "error_document": "error.html",
+                "index_html": "./files/s3/institutional_website/index.html",
+                "error_html": "./files/s3/institutional_website/error.html",
+                "styles_css": "./files/s3/institutional_website/styles.css"
             },
             "tags": {},
             "force_destroy": true
