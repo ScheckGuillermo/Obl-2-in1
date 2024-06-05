@@ -96,6 +96,32 @@
                     "ipv6_cidr_blocks": []
                 }
             ]
+        },
+        "rds_sg": {
+            "name": "rds_sg",
+            "allow_all_internal_traffic": false,
+            "ingress": [
+                {
+                    "from_port": 3306,
+                    "to_port": 3306,
+                    "protocol": "tcp",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                }
+            ],
+            "egress": [
+                {
+                    "from_port": 0,
+                    "to_port": 0,
+                    "protocol": "-1",
+                    "cidr_blocks": [
+                        "0.0.0.0/0"
+                    ],
+                    "ipv6_cidr_blocks": []
+                }
+            ]
         }
     }
 }

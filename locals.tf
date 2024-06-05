@@ -8,6 +8,7 @@ locals {
   sns_config        = jsondecode(file("${path.module}/configs/sns_config.json"))
   lambda_config     = jsondecode(file("${path.module}/configs/lambda_config.json"))
   cloudwatch_config = jsondecode(file("${path.module}/configs/cloudwatch_config.json"))
+  rds_config        = jsondecode(file("${path.module}/configs/rds_config.json"))
 }
 
 locals {
@@ -21,6 +22,10 @@ locals {
     elb : {
       elb_name : "online-store-web-app-elb"
       security_group : local.vpc_config.security_groups["elb_sg"].name
+    }
+    rds : {
+      db_instance : local.rds_config["online_store_web_app"]
+      db_security_group : local.vpc_config.security_groups["rds_sg"].name
     }
   }
 

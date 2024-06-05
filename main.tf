@@ -12,7 +12,6 @@ module "vpc" {
   security_groups      = local.vpc_config.security_groups
 }
 
-
 #--------------------------------------------------------------------
 # Centralized logs for main resources
 #--------------------------------------------------------------------
@@ -57,7 +56,25 @@ module "online_store_ec2_instances" {
   user_data_path    = local.online_store_web_app.ec2.instance.user_data_path
 }
 
+module "online_store_rds" {
+  source = "./modules/rds"
 
+  engine               = local.online_store_web_app.rds.db_instance.engine
+  engine_version       = local.online_store_web_app.rds.db_instance.engine_version
+  instance_class       = local.online_store_web_app.rds.db_instance.instance_class
+  db_name              = local.online_store_web_app.rds.db_instance.db_name
+  username             = local.online_store_web_app.rds.db_instance.username
+  allocated_storage    = local.online_store_web_app.rds.db_instance.allocated_storage
+  parameter_group_name = local.online_store_web_app.rds.db_instance.parameter_group_name
+  skip_final_snapshot  = local.online_store_web_app.rds.db_instance.skip_final_snapshot
+  publicly_accessible  = local.online_store_web_app.rds.db_instance.publicly_accessible
+  security_group_id    = module.vpc.security_group_ids[local.online_store_web_app.rds.db_security_group]
+  db_subnet_group_name = local.online_store_web_app.rds.db_instance.db_subnet_group.name
+  db_subnet_group_tags = local.online_store_web_app.rds.db_instance.db_subnet_group.tags
+  subnet_ids           = module.vpc.private_subnet_ids
+  tags                 = local.online_store_web_app.rds.db_instance.tags
+
+}
 
 module "online_store_elb" {
   source = "./modules/elb"
@@ -191,4 +208,3 @@ module "order_processing_lambda" {
   role_arn       = module.order_processing_lambda_iam_role.role_arn
   log_group_name = module.centralized_logs.log_group_name
 }
-
