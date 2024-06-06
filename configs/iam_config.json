@@ -142,7 +142,7 @@
         },
         "policies": [
             {
-                "policy_name": "order_processing_enqueue_olicy",
+                "policy_name": "order_processing_enqueue_policy",
                 "policy_template": {
                     "Version": "2012-10-17",
                     "Statement": [

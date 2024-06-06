@@ -1,4 +1,12 @@
 #--------------------------------------------------------------------
+# Step to configure AWS profile:
+# 1. Open the variables.tf file.
+# 2. Change the value of the `aws_profile` variable to your AWS profile.
+#    Example: default = "your-aws-profile"
+#--------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------
 # Main VPC where all the resources will be created
 #--------------------------------------------------------------------
 module "vpc" {
